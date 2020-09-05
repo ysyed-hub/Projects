@@ -181,7 +181,7 @@ int main(int argc, const char * argv[]) {
     return 0;
 }
 
-int menu(void) {
+int Menu(void) {
     cout << "\n1: Go on adventure" << endl;
     cout << "2: Upgrade equipment" << endl;
     cout << "3: Show character stats" << endl;
