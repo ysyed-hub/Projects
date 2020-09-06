@@ -25,7 +25,7 @@ public:
     int CharacterHealth(void) {return health_;}
     int CharacterAttack(void) {return (attack_damage_ > 0 ? attack_damage_ : magic_damage_);}
     void ShowStats(void);
-    Character(int w, int x, int y, int z);
+    Character(int type, int health, int attack_damage, int magic_damage);
     int DamageUpgrade(void);
     int HealthUpgrade(void);
     int ExpGain (int experience_gain);
@@ -41,7 +41,7 @@ class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
     int experience_;
 
 public:
-    Enemy(int w, int x, int y, int z);
+    Enemy(int health, int attack, int gold, int experience);
     int EnemyGold(void) {return gold_;}
     int EnemyHealth(void) {return health_;}
     int EnemyAttack(void) {return attack_;}

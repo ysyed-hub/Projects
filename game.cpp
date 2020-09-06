@@ -22,7 +22,7 @@ void Character::ShowStats (void) {
     cout << "Exp: " << exp_ << endl;
 }
 
-Character::Character(int w, int x, int y, int z) : type_(w), health_(x), attack_damage_(y), magic_damage_(z), gold_(0), exp_(0), level_(1) {}
+Character::Character(int type, int health, int attack_damage, int magic_damage) : type_(type), health_(health), attack_damage_(attack_damage), magic_damage_(magic_damage), gold_(0), exp_(0), level_(1) {}
 
 int Character::DamageUpgrade(void) {
     gold_ -= 50;
@@ -73,4 +73,4 @@ void Character::LevelUp(int type_) {
     cout << "\nCongrats! You have leveled up to level " << level_ << "." << endl;
 }
 
-Enemy::Enemy(int x, int y, int z, int w) : health_(x), attack_(y), gold_(z), experience_(w) {}
+Enemy::Enemy(int health, int attack, int gold, int experience) : health_(health), attack_(attack), gold_(gold), experience_(experience) {}
