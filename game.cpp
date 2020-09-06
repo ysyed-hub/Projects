@@ -14,76 +14,76 @@
 using namespace std;
 
 void Character::ShowStats (void) {
-    cout << "\nLevel: " << level << endl;
-    cout << "Health: " << health << endl;
-    cout << "Physical Damage: " << attack_damage << endl;
-    cout << "Magic Damage: " << magic_damage << endl;
-    cout << "Gold: " << gold << endl;
-    cout << "Exp: " << exp << endl;
+    cout << "\nLevel: " << level_ << endl;
+    cout << "Health: " << health_ << endl;
+    cout << "Physical Damage: " << attack_damage_ << endl;
+    cout << "Magic Damage: " << magic_damage_ << endl;
+    cout << "Gold: " << gold_ << endl;
+    cout << "Exp: " << exp_ << endl;
 }
 
 Character::Character(int w, int x, int y, int z) {
-    type = w;
-    health = x;
-    attack_damage = y;
-    magic_damage = z;
-    gold = 0;
-    exp = 0;
-    level = 1;
+    type_ = w;
+    health_ = x;
+    attack_damage_ = y;
+    magic_damage_ = z;
+    gold_ = 0;
+    exp_ = 0;
+    level_ = 1;
 }
 
 int Character::DamageUpgrade(void) {
-    gold -= 50;
-    if (attack_damage == 0) {
-        magic_damage += 20;
-        return magic_damage;
+    gold_ -= 50;
+    if (attack_damage_ == 0) {
+        magic_damage_ += 20;
+        return magic_damage_;
     }
-    attack_damage += 20;
-    return attack_damage;
+    attack_damage_ += 20;
+    return attack_damage_;
 }
 
 int Character::HealthUpgrade(void) {
-    health += 40;
-    gold -= 50;
-    return health;
+    health_ += 40;
+    gold_ -= 50;
+    return health_;
 }
 
 int Character::ExpGain(int experience_gain) {
-    exp += experience_gain;
-    return exp;
+    exp_ += experience_gain;
+    return exp_;
 }
 
 int Character::GoldGain(int gold_gain) {
-    gold += gold_gain;
-    return gold;
+    gold_ += gold_gain;
+    return gold_;
 }
 
-void Character::LevelUp(int type) {
-    double x = 100 * pow(1.1, level);
+void Character::LevelUp(int type_) {
+    double x = 100 * pow(1.1, level_);
     int level_up_exp = x;
-    while (exp > level_up_exp) {
-        if (type == 1) {
-            health += 25;
-            magic_damage += 10;
+    while (exp_ > level_up_exp) {
+        if (type_ == 1) {
+            health_ += 25;
+            magic_damage_ += 10;
         }
-        if (type == 2) {
-            health += 40;
-            attack_damage += 5;
+        if (type_ == 2) {
+            health_ += 40;
+            attack_damage_ += 5;
         }
-        if (type == 3) {
-            health += 20;
-            attack_damage += 12;
+        if (type_ == 3) {
+            health_ += 20;
+            attack_damage_ += 12;
         }
-        exp -= level_up_exp;
-        level++;
+        exp_ -= level_up_exp;
+        level_++;
         level_up_exp *= 1.1;
     }
-    cout << "\nCongrats! You have leveled up to level " << level << "." << endl;
+    cout << "\nCongrats! You have leveled up to level " << level_ << "." << endl;
 }
 
 Enemy::Enemy(int x, int y, int z, int w) {
-    health = x;
-    attack = y;
-    gold = z;
-    experience = w;
+    health_ = x;
+    attack_ = y;
+    gold_ = z;
+    experience_ = w;
 }

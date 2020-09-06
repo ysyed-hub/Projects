@@ -11,41 +11,41 @@
 
 class Character { // Sorcerer, Warrior, Ranger
   
-    int type;
-    int health;
-    int attack_damage;
-    int magic_damage;
-    int gold;
-    int exp;
-    int level;
+    int type_;
+    int health_;
+    int attack_damage_;
+    int magic_damage_;
+    int gold_;
+    int exp_;
+    int level_;
     
 public:
-    int HeroType(void) {return type;}
-    int GoldCount(void) {return gold;}
-    int CharacterHealth(void) {return health;}
-    int CharacterAttack(void) {return (attack_damage > 0 ? attack_damage : magic_damage);}
+    int HeroType(void) {return type_;}
+    int GoldCount(void) {return gold_;}
+    int CharacterHealth(void) {return health_;}
+    int CharacterAttack(void) {return (attack_damage_ > 0 ? attack_damage_ : magic_damage_);}
     void ShowStats(void);
     Character(int w, int x, int y, int z);
     int DamageUpgrade(void);
     int HealthUpgrade(void);
     int ExpGain (int experience_gain);
     int GoldGain (int gold_gain);
-    void LevelUp (int type);
+    void LevelUp (int type_);
     
 };
 
 class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
-    int health;
-    int attack;
-    int gold;
-    int experience;
+    int health_;
+    int attack_;
+    int gold_;
+    int experience_;
 
 public:
     Enemy(int w, int x, int y, int z);
-    int EnemyGold(void) {return gold;}
-    int EnemyHealth(void) {return health;}
-    int EnemyAttack(void) {return attack;}
-    int EnemyExperience(void) {return experience;}
+    int EnemyGold(void) {return gold_;}
+    int EnemyHealth(void) {return health_;}
+    int EnemyAttack(void) {return attack_;}
+    int EnemyExperience(void) {return experience_;}
 };
 
 
