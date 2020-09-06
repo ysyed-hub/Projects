@@ -1,118 +1,17 @@
 
 //
-//  main.cpp
+//  Text Adventure Game.cpp
 //  Text Adventure Game
 //
-//  Created by Yunus Syed on 9/1/20.
+//  Created by Yunus Syed on 9/5/20.
 //  Copyright © 2020 Yunus Syed. All rights reserved.
 //
 
 #include <iostream>
 #include <cmath>
-
+#include "game.cpp"
+#include "header.hpp"
 using namespace std;
-
-class Character { // Sorcerer, Warrior, Ranger
-  
-    int type;
-    int health;
-    int attack_damage;
-    int magic_damage;
-    int gold;
-    int exp;
-    int level;
-    
-public:
-    int HeroType(void) {return type;}
-    void ShowStats (void) {
-        cout << "\nLevel: " << level << endl;
-        cout << "Health: " << health << endl;
-        cout << "Physical Damage: " << attack_damage << endl;
-        cout << "Magic Damage: " << magic_damage << endl;
-        cout << "Gold: " << gold << endl;
-        cout << "Exp: " << exp << endl;
-    }
-    
-    Character(int w, int x, int y, int z) {
-        type = w;
-        health = x;
-        attack_damage = y;
-        magic_damage = z;
-        gold = 0;
-        exp = 0;
-        level = 1;
-    }
-    
-    int DamageUpgrade(void) {
-        gold -= 50;
-        if (attack_damage == 0) {
-            magic_damage += 20;
-            return magic_damage;
-        }
-        attack_damage += 20;
-        return attack_damage;
-    }
-    
-    int HealthUpgrade(void) {
-        health += 40;
-        gold -= 50;
-        return health;
-    }
-    int GoldCount(void) {return gold;}
-    int CharacterHealth(void) {return health;}
-    int CharacterAttack(void) {return (attack_damage > 0 ? attack_damage : magic_damage);}
-    int ExpGain(int experience_gain) {
-        exp += experience_gain;
-        return exp;
-    }
-    int GoldGain(int gold_gain) {
-        gold += gold_gain;
-        return gold;
-    }
-    
-    void LevelUp(int type) {
-        double x = 100 * pow(1.1, level);
-        int level_up_exp = x;
-        while (exp > level_up_exp) {
-            if (type == 1) {
-                health += 25;
-                magic_damage += 10;
-            }
-            if (type == 2) {
-                health += 40;
-                attack_damage += 5;
-            }
-            if (type == 3) {
-                health += 20;
-                attack_damage += 12;
-            }
-            exp -= level_up_exp;
-            level++;
-            level_up_exp *= 1.1;
-        }
-        cout << "\nCongrats! You have leveled up to level " << level << "." << endl;
-    }
-    
-};
-
-class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
-    int health;
-    int attack;
-    int gold;
-    int experience;
-    
-public:
-    Enemy(int x, int y, int z, int w) {
-        health = x;
-        attack = y;
-        gold = z;
-        experience = w;
-    }
-    int EnemyGold(void) {return gold;}
-    int EnemyHealth(void) {return health;}
-    int EnemyAttack(void) {return attack;}
-    int EnemyExperience(void) {return experience;}
-};
 
 int Introduction(string *p);
 int Menu(void);
