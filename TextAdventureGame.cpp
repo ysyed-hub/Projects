@@ -1,3 +1,4 @@
+
 //
 //  Text Adventure Game.cpp
 //  Text Adventure Game
@@ -8,51 +9,51 @@
 
 #include <iostream>
 #include <cmath>
-#include "game.cpp"
 #include "header.hpp"
-#include "games.cpp"
-#include "games.hpp"
 using namespace std;
 
 
 int main(int argc, const char * argv[]) {
-    Game Tag;
-    string char_name;
-    int char_type = Tag.Introduction(&char_name);
-    int char_health, char_physical_damage, char_magic_damage;
-    if (char_type == 1) {
-        char_health = 200;
-        char_physical_damage = 0;
-        char_magic_damage = 100;
+    Character Null_User(1, 0, 0, 0);
+    cout << "Welcome to my text adventure game." << endl;
+    cout << "Enter your name: ";
+    string user_name;
+    cin >> user_name;
+    
+    int user_type = Null_User.Introduction(user_name);
+    int user_health, user_physical_damage, user_magic_damage;
+    if (user_type == 1) {
+        user_health = 200;
+        user_physical_damage = 0;
+        user_magic_damage = 100;
     }
-    if (char_type == 2) {
-        char_health = 250;
-        char_physical_damage = 70;
-        char_magic_damage = 0;
+    if (user_type == 2) {
+        user_health = 250;
+        user_physical_damage = 70;
+        user_magic_damage = 0;
     }
-    if (char_type == 3) {
-        char_health = 150;
-        char_physical_damage = 120;
-        char_magic_damage = 0;
+    if (user_type == 3) {
+        user_health = 150;
+        user_physical_damage = 120;
+        user_magic_damage = 0;
     }
     
-    Tag(char_name, char_type, char_health, char_physical_damage , char_magic_damage);
+    Character User(user_type, user_health, user_physical_damage, user_magic_damage);
     bool final_boss = false; // Final boss has not been defeated
     bool leave_game = false;
-    Character *Player = Tag.UserInfo;
     
     while (final_boss == false && leave_game == false) {
         
-        int user_choice = Tag.Menu();
+        int user_choice = User.Menu();
         switch (user_choice) {
             case 1:
-                final_boss = Tag.Adventure(Player);
+                final_boss = User.Adventure();
                 break;
             case 2:
-                Tag.Upgrade(Player);
+                User.Upgrade();
                 break;
             case 3:
-                (Player) -> ShowStats();
+                User.ShowStats();
                 break;
             case 4:
                 leave_game = true;

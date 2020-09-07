@@ -10,6 +10,21 @@
 #define header_hpp
 using namespace std;
 
+class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
+    int health_;
+    int attack_;
+    int gold_;
+    int experience_;
+
+public:
+    Enemy(int health, int attack, int gold, int experience);
+    int EnemyGold(void) {return gold_;}
+    int EnemyHealth(void) {return health_;}
+    int EnemyAttack(void) {return attack_;}
+    int EnemyExperience(void) {return experience_;}
+};
+
+
 class Character { // Sorcerer, Warrior, Ranger
   
     int type_;
@@ -32,21 +47,15 @@ public:
     int ExpGain (int experience_gain);
     int GoldGain (int gold_gain);
     void LevelUp (int type_);
+    int Introduction(string username);
+    int Menu();
+    void Upgrade();
+    int UpgradeMenu();
+    bool Adventure();
+    int AdventureMenu();
+    void Battle(Enemy enemy_fought, string enemy_type);
+    bool BattleBoss(Enemy enemy_fought);
     
-};
-
-class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
-    int health_;
-    int attack_;
-    int gold_;
-    int experience_;
-
-public:
-    Enemy(int health, int attack, int gold, int experience);
-    int EnemyGold(void) {return gold_;}
-    int EnemyHealth(void) {return health_;}
-    int EnemyAttack(void) {return attack_;}
-    int EnemyExperience(void) {return experience_;}
 };
 
 
