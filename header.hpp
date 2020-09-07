@@ -17,7 +17,7 @@ class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
     int experience_;
 
 public:
-    Enemy(int health, int attack, int gold, int experience);
+    Enemy(int health, int attack, int gold, int experience) : health_(health), attack_(attack), gold_(gold), experience_(experience) {};
     int EnemyGold() {return gold_;}
     int EnemyHealth() {return health_;}
     int EnemyAttack() {return attack_;}

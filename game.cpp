@@ -13,12 +13,6 @@
 
 using namespace std;
 
-Enemy Goblin(50, 20, 100, 50);
-Enemy Wolf(250, 70, 250, 200);
-Enemy Troll(1000, 200, 800, 500);
-Enemy Giant(5500, 1000, 1500, 1000);
-Enemy Dragon(12000, 2000, 0, 0);
-
 void Character::PlayGame () {
     
     enum menuOptions {GoOnAdventure = 1, UpgradeUser, ShowUserStats, LeaveGame};
@@ -88,21 +82,22 @@ int Character::GoldGain(int gold_gain) {
 }
 
 void Character::LevelUp(int type_) {
+    enum characterType {Sorcerer = 1, Warrior, Ranger};
     double x = 100 * pow(1.1, level_);
     int level_up_exp = x;
     while (exp_ > level_up_exp) {
-        if (type_ == 1) {
-            health_ += 25;
-            magic_damage_ += 10;
+        switch (type_) {
+            case Sorcerer:
+                health_ += 25;
+                magic_damage_ += 10;
+            case Warrior:
+                health_ += 40;
+                physical_damage_ += 5;
+            case Ranger:
+                health_ += 20;
+                physical_damage_ += 12;
         }
-        if (type_ == 2) {
-            health_ += 40;
-            physical_damage_ += 5;
-        }
-        if (type_ == 3) {
-            health_ += 20;
-            physical_damage_ += 12;
-        }
+       
         exp_ -= level_up_exp;
         level_++;
         level_up_exp *= 1.1;
@@ -152,22 +147,29 @@ void Character::Battle(Enemy enemy_fought, string enemy_type) {
 
 
 bool Character::Adventure() {
+    
+    enum enemyType {enemyGoblin = 1, enemyWolf, enemyTroll, enemyGiant, enemyDragon};
+    Enemy Goblin(50, 20, 100, 50);
+    Enemy Wolf(250, 70, 250, 200);
+    Enemy Troll(1000, 200, 800, 500);
+    Enemy Giant(5500, 1000, 1500, 1000);
+    Enemy Dragon(12000, 2000, 0, 0);
+    
     bool game_complete = false;
-    int adventure_choice = AdventureMenu();
-    switch (adventure_choice) {
-        case 1:
+    switch (AdventureMenu()) {
+        case enemyGoblin:
             Battle(Goblin, "goblins");
             break;
-        case 2:
+        case enemyWolf:
             Battle(Wolf, "wolves");
             break;
-        case 3:
+        case enemyTroll:
             Battle(Troll, "trolls");
             break;
-        case 4:
+        case enemyGiant:
             Battle(Giant, "giant");
             break;
-        case 5:
+        case enemyDragon:
             game_complete = BattleBoss(Dragon);
             break;
     }
@@ -183,36 +185,39 @@ int Character::AdventureMenu() {
     cout << "4) Challenge a giant." << endl;
     cout << "5) Defeat the great dragon\n" << endl;
     cout << "Enter the number of the option you wish to choose: ";
-    string x;
-    cin >> x;
-    while (x != "1" && x != "2" && x != "3" && x != "4" && x != "5") {
+    string adventure_choice;
+    cin >> adventure_choice;
+    while (adventure_choice != "1" && adventure_choice != "2" && adventure_choice != "3" && adventure_choice != "4" && adventure_choice != "5") {
         cout << "\nImproper input, please choose either 1, 2, 3, 4 or 5: ";
-        cin >> x;
+        cin >> adventure_choice;
     }
-    if (x == "1")
+    if (adventure_choice == "1") // Fight goblins
         return 1;
-    if (x == "2")
+    if (adventure_choice == "2") // Fight wolves
         return 2;
-    if (x == "3")
+    if (adventure_choice == "3") // Fight trolls
         return 3;
-    if (x == "4")
+    if (adventure_choice == "4") // Fight giant
         return 4;
-    return 5;
+    return 5;                    // Fight dragon
 }
 
 void Character::Upgrade() {
+    
+    enum upgradeOption {upgradeHealth = 1, upgradeDamage, Leave};
+    
     cout << "\n";
     if (GoldCount() < 50) {
         cout << "Not enough gold to make any upgrades." << endl;
         return;
     }
     int upgrade_choice;
-    while ((upgrade_choice = UpgradeMenu()) != 3) {
+    while ((upgrade_choice = UpgradeMenu()) != Leave) {
         
-        if (upgrade_choice == 1) {
+        if (upgrade_choice == upgradeHealth) {
             cout << "Your health has been increased to " << HealthUpgrade() << "." << endl;
         }
-        if (upgrade_choice == 2) {
+        if (upgrade_choice == upgradeDamage) {
             cout << "Your damage has been increased to " << DamageUpgrade() << "." << endl;
         }
         GoldGain(-50);
@@ -227,17 +232,17 @@ void Character::Upgrade() {
 int Character::UpgradeMenu() {
     cout << "You can increase your maximum health by 40 or increase your attack by 20 for 50 gold." << endl;
     cout << "Enter 1 to increase health, 2 to increase attack or 3 to leave: ";
-    string x;
-    cin >> x;
-    while (x != "1" && x != "2" && x != "3") {
+    string upgrade_menu_choice;
+    cin >> upgrade_menu_choice;
+    while (upgrade_menu_choice != "1" && upgrade_menu_choice != "2" && upgrade_menu_choice != "3") {
         cout << "\nImproper input, please choose either 1, 2, or 3: ";
-        cin >> x;
+        cin >> upgrade_menu_choice;
     }
-    if (x == "1")
+    if (upgrade_menu_choice == "1") // Upgrade health
         return 1;
-    if (x == "2")
+    if (upgrade_menu_choice == "2") // Upgrade attack
         return 2;
-    return 3;
+    return 3;                       // Leave upgrade shop
 }
 
 
@@ -266,20 +271,22 @@ void Character::InitializeUser() {
     
     int user_health, user_physical_damage, user_magic_damage;
     
-    if (user_type == "1") {
-        SetType(1);
+    enum charactertype {Sorcerer = 1, Warrior, Ranger};
+    
+    if (user_type == "1") { // Sorcerer
+        SetType(Sorcerer);
         user_health = 200;
         user_physical_damage = 0;
         user_magic_damage = 100;
     }
-    if (user_type == "2") {
-        SetType(2);
+    if (user_type == "2") { // Warrior
+        SetType(Warrior);
         user_health = 250;
         user_physical_damage = 70;
         user_magic_damage = 0;
     }
-    if (user_type == "3") {
-        SetType(3);
+    if (user_type == "3") { // Ranger
+        SetType(Ranger);
         user_health = 150;
         user_physical_damage = 120;
         user_magic_damage = 0;
@@ -318,20 +325,19 @@ int Character::Menu() {
     cout << "3: Show character stats" << endl;
     cout << "4: Leave game\n" << endl;
     cout << "Enter the number of the option you choose: ";
-    string x;
-    cin >> x;
-    while (x != "1" && x != "2" && x != "3" && x != "4") {
+    string menu_choice;
+    cin >> menu_choice;
+    while (menu_choice != "1" && menu_choice != "2" && menu_choice != "3" && menu_choice != "4") {
         cout << "\nImproper input, please choose either 1, 2, 3 or 4: ";
-        cin >> x;
+        cin >> menu_choice;
     }
-    if (x == "1")
+    if (menu_choice == "1") // Go on adventure
         return 1;
-    if (x == "2")
+    if (menu_choice == "2") // Upgrade equipment
         return 2;
-    if (x == "3")
+    if (menu_choice == "3") // Show character status
         return 3;
-    return 4;
+    return 4;     // Leave game
 }
 
-Enemy::Enemy(int health, int attack, int gold, int experience) : health_(health), attack_(attack), gold_(gold), experience_(experience) {}
 
