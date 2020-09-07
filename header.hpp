@@ -8,6 +8,7 @@
 
 #ifndef header_hpp
 #define header_hpp
+using namespace std;
 
 class Character { // Sorcerer, Warrior, Ranger
   

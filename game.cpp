@@ -13,6 +13,7 @@
 
 using namespace std;
 
+
 void Character::ShowStats (void) {
     cout << "\nLevel: " << level_ << endl;
     cout << "Health: " << health_ << endl;
@@ -24,7 +25,7 @@ void Character::ShowStats (void) {
 
 Character::Character(int type, int health, int attack_damage, int magic_damage) : type_(type), health_(health), attack_damage_(attack_damage), magic_damage_(magic_damage), gold_(0), exp_(0), level_(1) {}
 
-int Character::DamageUpgrade(void) {
+int Character::DamageUpgrade() {
     gold_ -= 50;
     if (attack_damage_ == 0) {
         magic_damage_ += 20;
@@ -74,3 +75,4 @@ void Character::LevelUp(int type_) {
 }
 
 Enemy::Enemy(int health, int attack, int gold, int experience) : health_(health), attack_(attack), gold_(gold), experience_(experience) {}
+
