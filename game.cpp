@@ -19,26 +19,56 @@ Enemy Troll(1000, 200, 800, 500);
 Enemy Giant(5500, 1000, 1500, 1000);
 Enemy Dragon(12000, 2000, 0, 0);
 
+void Character::PlayGame () {
+    
+    enum menuOptions {GoOnAdventure = 1, UpgradeUser, ShowUserStats, LeaveGame};
+    
+    bool final_boss = false; // Final boss has not been defeated
+       bool leave_game = false;
+       
+       while (final_boss == false && leave_game == false) {
+           
+           switch (Menu()) {
+               case GoOnAdventure:
+                   final_boss = Adventure();
+                   break;
+               case UpgradeUser:
+                   Upgrade();
+                   break;
+               case ShowUserStats:
+                   ShowStats();
+                   break;
+               case LeaveGame:
+                   leave_game = true;
+                   break;
+           }
+       }
+       
+       if (final_boss == true) {
+           // ending credits
+       }
+       cout << "\nThanks for playing!\n" << endl;
+}
 
 void Character::ShowStats () {
     cout << "\nLevel: " << level_ << endl;
     cout << "Health: " << health_ << endl;
-    cout << "Physical Damage: " << attack_damage_ << endl;
+    cout << "Physical Damage: " << physical_damage_ << endl;
     cout << "Magic Damage: " << magic_damage_ << endl;
     cout << "Gold: " << gold_ << endl;
     cout << "Exp: " << exp_ << endl;
 }
 
-Character::Character(int type, int health, int attack_damage, int magic_damage) : type_(type), health_(health), attack_damage_(attack_damage), magic_damage_(magic_damage), gold_(0), exp_(0), level_(1) {}
+Character::Character(int type, int health, int physical_damage, int magic_damage) : type_(type), health_(health), physical_damage_(physical_damage), magic_damage_(magic_damage), gold_(0), exp_(0), level_(1) {}
 
 int Character::DamageUpgrade() {
     gold_ -= 50;
-    if (attack_damage_ == 0) {
+    if (physical_damage_ == 0) {
         magic_damage_ += 20;
         return magic_damage_;
     }
-    attack_damage_ += 20;
-    return attack_damage_;
+    physical_damage_ += 20;
+    return physical_damage_;
 }
 
 int Character::HealthUpgrade() {
@@ -67,11 +97,11 @@ void Character::LevelUp(int type_) {
         }
         if (type_ == 2) {
             health_ += 40;
-            attack_damage_ += 5;
+            physical_damage_ += 5;
         }
         if (type_ == 3) {
             health_ += 20;
-            attack_damage_ += 12;
+            physical_damage_ += 12;
         }
         exp_ -= level_up_exp;
         level_++;
@@ -212,7 +242,12 @@ int Character::UpgradeMenu() {
 
 
 
-int Character::Introduction(string username) {
+void Character::InitializeUser() {
+    cout << "Welcome to my text adventure game." << endl;
+    cout << "Enter your name: ";
+    string username;
+    cin >> username;
+    SetName(username);
     cout << "\nWelcome " << username << ", you are assigned the task of defeating the great dragon that wreaks havoc on the lands.\n" << endl;
     cout << "At the moment, you are far too weak to defeat the dragon." << endl;
     cout << "Strengthen yourself by defeating monsters and upgrading your equipment." << endl;
@@ -221,19 +256,60 @@ int Character::Introduction(string username) {
     cout << "2. Warrior, HP: 250 + 40 per level, Physical Damage: 70 + 7 per level" << endl;
     cout << "3. Ranger, HP: 150 + 20 per level, Physical Damage: 120 + 12 per level\n" << endl;
     cout << "Enter the number representing your choice of character type: ";
-    string x;
-    cin >> x;
+    string user_type;
+    cin >> user_type;
     
-    while (x != "1" && x != "2" && x != "3") {
+    while (user_type != "1" && user_type != "2" && user_type != "3") {
         cout << "\nImproper input, please choose either 1, 2, or 3: ";
-        cin >> x;
+        cin >> user_type;
     }
-    if (x == "1")
-        return 1;
-    if (x == "2")
-        return 2;
-    return 3;
     
+    int user_health, user_physical_damage, user_magic_damage;
+    
+    if (user_type == "1") {
+        SetType(1);
+        user_health = 200;
+        user_physical_damage = 0;
+        user_magic_damage = 100;
+    }
+    if (user_type == "2") {
+        SetType(2);
+        user_health = 250;
+        user_physical_damage = 70;
+        user_magic_damage = 0;
+    }
+    if (user_type == "3") {
+        SetType(3);
+        user_health = 150;
+        user_physical_damage = 120;
+        user_magic_damage = 0;
+    }
+    
+    SetHealth(user_health);
+    SetPhysicalDamage(user_physical_damage);
+    SetMagicDamage(user_magic_damage);
+
+    
+}
+
+void Character::SetName(string username) {
+    name_ = username;
+}
+
+void Character::SetType(int user_type) {
+    type_ = user_type;
+}
+
+void Character::SetPhysicalDamage(int user_physical_damage) {
+    physical_damage_ = user_physical_damage;
+}
+
+void Character::SetMagicDamage(int user_magic_damage) {
+    magic_damage_ = user_magic_damage;
+}
+
+void Character::SetHealth(int user_health) {
+    health_ = user_health;
 }
 
 int Character::Menu() {
