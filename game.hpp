@@ -39,7 +39,7 @@ public:
     int GoldCount() const {return gold_;}
     int CharacterHealth() const {return health_;}
     int CharacterAttack() const {return (physical_damage_ > 0 ? physical_damage_ : magic_damage_);}
-    void ShowStats();
+    void ShowStats() const;
     Character(int type, int health, int physical_damage, int magic_damage);
     int DamageUpgrade();
     int HealthUpgrade();
@@ -49,11 +49,11 @@ public:
     void Initialize();
     int Menu();
     void Upgrade();
-    int UpgradeMenu();
+    int UpgradeMenu() const;
     bool Adventure();
-    int AdventureMenu();
+    int AdventureMenu() const;
     void Battle(Enemy enemy_fought, string enemy_type);
-    bool BattleFinalBoss(Enemy enemy_fought);
+    bool BattleFinalBoss(Enemy enemy_fought) const;
     void PlayGame();
     
 };

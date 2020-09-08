@@ -44,7 +44,7 @@ void Character::PlayGame () {
     cout << "\nThanks for playing!\n" << endl;
 }
 
-void Character::ShowStats () {
+void Character::ShowStats () const {
     cout << "\nLevel: " << level_ << endl;
     cout << "Health: " << health_ << endl;
     cout << "Physical Damage: " << physical_damage_ << endl;
@@ -106,7 +106,7 @@ void Character::LevelUp(int type_) {
 }
 
 
-bool Character::BattleFinalBoss(Enemy enemy_fought)  {
+bool Character::BattleFinalBoss(Enemy enemy_fought) const {
     int user_health = CharacterHealth();
     int user_attack = CharacterAttack();
     int enemy_health = enemy_fought.health;
@@ -177,7 +177,7 @@ bool Character::Adventure() {
     return game_complete;
 }
 
-int Character::AdventureMenu() {
+int Character::AdventureMenu() const {
     cout << "\nWhat type of adventure do you plan on going on?\n" << endl;
     cout << "1) Fight the goblins that reside in the northern caves." << endl;
     cout << "2) Destroy the pack of wolves in the forest" << endl;
@@ -229,7 +229,7 @@ void Character::Upgrade() {
     cout << "Thank you for coming!\n";
 }
 
-int Character::UpgradeMenu() {
+int Character::UpgradeMenu() const {
     cout << "You can increase your maximum health by 40 or increase your attack by 20 for 50 gold." << endl;
     cout << "Enter 1 to increase health, 2 to increase attack or 3 to leave: ";
     string upgrade_menu_choice;
