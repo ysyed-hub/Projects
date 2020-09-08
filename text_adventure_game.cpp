@@ -15,9 +15,9 @@ using namespace std;
 
 int main(int argc, const char * argv[]) {
     
-    Character User(1, 0, 0, 0);
+    Character user(1, 0, 0, 0);
     user.Initialize();
-    User.PlayGame();
+    user.PlayGame();
     
    
     return 0;
