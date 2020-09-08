@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cmath>
-#include "header.hpp"
+#include "game.hpp"
 
 using namespace std;
 
