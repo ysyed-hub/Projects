@@ -8,31 +8,7 @@
 
 #ifndef header_hpp
 #define header_hpp
-
-class Character { // Sorcerer, Warrior, Ranger
-  
-    int type_;
-    int health_;
-    int attack_damage_;
-    int magic_damage_;
-    int gold_;
-    int exp_;
-    int level_;
-    
-public:
-    int HeroType(void) {return type_;}
-    int GoldCount(void) {return gold_;}
-    int CharacterHealth(void) {return health_;}
-    int CharacterAttack(void) {return (attack_damage_ > 0 ? attack_damage_ : magic_damage_);}
-    void ShowStats(void);
-    Character(int type, int health, int attack_damage, int magic_damage);
-    int DamageUpgrade(void);
-    int HealthUpgrade(void);
-    int ExpGain (int experience_gain);
-    int GoldGain (int gold_gain);
-    void LevelUp (int type_);
-    
-};
+using namespace std;
 
 class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
     int health_;
@@ -41,11 +17,52 @@ class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
     int experience_;
 
 public:
-    Enemy(int health, int attack, int gold, int experience);
-    int EnemyGold(void) {return gold_;}
-    int EnemyHealth(void) {return health_;}
-    int EnemyAttack(void) {return attack_;}
-    int EnemyExperience(void) {return experience_;}
+    Enemy(int health, int attack, int gold, int experience) : health_(health), attack_(attack), gold_(gold), experience_(experience) {};
+    int EnemyGold() {return gold_;}
+    int EnemyHealth() {return health_;}
+    int EnemyAttack() {return attack_;}
+    int EnemyExperience() {return experience_;}
+};
+
+
+class Character { // Sorcerer, Warrior, Ranger
+  
+    int type_;
+    int health_;
+    int physical_damage_;
+    int magic_damage_;
+    int gold_;
+    int exp_;
+    int level_;
+    string name_;
+    
+public:
+    void SetName(string username);
+    void SetType(int user_type);
+    void SetPhysicalDamage(int user_physical_damage);
+    void SetMagicDamage(int user_magic_damage);
+    void SetHealth(int user_health);
+    int HeroType() {return type_;}
+    int GoldCount() {return gold_;}
+    int CharacterHealth() {return health_;}
+    int CharacterAttack() {return (physical_damage_ > 0 ? physical_damage_ : magic_damage_);}
+    void ShowStats();
+    Character(int type, int health, int physical_damage, int magic_damage);
+    int DamageUpgrade();
+    int HealthUpgrade();
+    int ExpGain (int experience_gain);
+    int GoldGain (int gold_gain);
+    void LevelUp (int type_);
+    void InitializeUser();
+    int Menu();
+    void Upgrade();
+    int UpgradeMenu();
+    bool Adventure();
+    int AdventureMenu();
+    void Battle(Enemy enemy_fought, string enemy_type);
+    bool BattleBoss(Enemy enemy_fought);
+    void PlayGame();
+    
 };
 
 
