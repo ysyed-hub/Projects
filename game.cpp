@@ -15,33 +15,33 @@ using namespace std;
 
 void Character::PlayGame () {
     
-    enum menuOptions {GoOnAdventure = 1, UpgradeUser, ShowUserStats, LeaveGame};
+    enum MenuOptions {kGoOnAdventure = 1, kUpgradeUser, kShowUserStats, kLeaveGame};
     
     bool final_boss = false; // Final boss has not been defeated
-       bool leave_game = false;
+    bool leave_game = false;
        
-       while (final_boss == false && leave_game == false) {
+    while (final_boss == false && leave_game == false) {
            
-           switch (Menu()) {
-               case GoOnAdventure:
-                   final_boss = Adventure();
-                   break;
-               case UpgradeUser:
-                   Upgrade();
-                   break;
-               case ShowUserStats:
-                   ShowStats();
-                   break;
-               case LeaveGame:
-                   leave_game = true;
-                   break;
-           }
-       }
+        switch (Menu()) {
+            case kGoOnAdventure:
+                final_boss = Adventure();
+                break;
+            case kUpgradeUser:
+                Upgrade();
+                break;
+            case kShowUserStats:
+                ShowStats();
+                break;
+            case kLeaveGame:
+                leave_game = true;
+                break;
+        }
+    }
        
-       if (final_boss == true) {
-           // ending credits
-       }
-       cout << "\nThanks for playing!\n" << endl;
+    if (final_boss == true) {
+        // ending credits
+    }
+    cout << "\nThanks for playing!\n" << endl;
 }
 
 void Character::ShowStats () {
@@ -106,11 +106,11 @@ void Character::LevelUp(int type_) {
 }
 
 
-bool Character::BattleBoss(Enemy enemy_fought) {
+bool Character::BattleFinalBoss(Enemy enemy_fought)  {
     int user_health = CharacterHealth();
     int user_attack = CharacterAttack();
-    int enemy_health = enemy_fought.EnemyHealth();
-    int enemy_attack = enemy_fought.EnemyAttack();
+    int enemy_health = enemy_fought.health;
+    int enemy_attack = enemy_fought.attack;
     while (user_health > 0 && enemy_health > 0) {
         user_health -= enemy_attack;
         enemy_health -= user_attack;
@@ -126,10 +126,10 @@ bool Character::BattleBoss(Enemy enemy_fought) {
 void Character::Battle(Enemy enemy_fought, string enemy_type) {
     int user_health = CharacterHealth();
     int user_attack = CharacterAttack();
-    int enemy_health = enemy_fought.EnemyHealth();
-    int enemy_attack = enemy_fought.EnemyAttack();
-    int experience = enemy_fought.EnemyExperience();
-    int gold = enemy_fought.EnemyGold();
+    int enemy_health = enemy_fought.health;
+    int enemy_attack = enemy_fought.attack;
+    int experience = enemy_fought.experience;
+    int gold = enemy_fought.gold;
     while (user_health > 0 && enemy_health > 0) {
         user_health -= enemy_attack;
         enemy_health -= user_attack;
@@ -148,29 +148,29 @@ void Character::Battle(Enemy enemy_fought, string enemy_type) {
 
 bool Character::Adventure() {
     
-    enum enemyType {enemyGoblin = 1, enemyWolf, enemyTroll, enemyGiant, enemyDragon};
-    Enemy Goblin(50, 20, 100, 50);
-    Enemy Wolf(250, 70, 250, 200);
-    Enemy Troll(1000, 200, 800, 500);
-    Enemy Giant(5500, 1000, 1500, 1000);
-    Enemy Dragon(12000, 2000, 0, 0);
+    enum EnemyType {kEnemyGoblin = 1, kEnemyWolf, kEnemyTroll, kEnemyGiant, kEnemyDragon};
+    const Enemy Goblin = {50, 20, 100, 50};
+    const Enemy Wolf = {250, 70, 250, 200};
+    const Enemy Troll = {1000, 200, 800, 500};
+    const Enemy Giant = {5500, 1000, 1500, 1000};
+    const Enemy Dragon = {12000, 2000, 0, 0};
     
     bool game_complete = false;
     switch (AdventureMenu()) {
-        case enemyGoblin:
+        case kEnemyGoblin:
             Battle(Goblin, "goblins");
             break;
-        case enemyWolf:
+        case kEnemyWolf:
             Battle(Wolf, "wolves");
             break;
-        case enemyTroll:
+        case kEnemyTroll:
             Battle(Troll, "trolls");
             break;
-        case enemyGiant:
+        case kEnemyGiant:
             Battle(Giant, "giant");
             break;
-        case enemyDragon:
-            game_complete = BattleBoss(Dragon);
+        case kEnemyDragon:
+            game_complete = BattleFinalBoss(Dragon);
             break;
     }
     LevelUp(HeroType());
@@ -204,7 +204,7 @@ int Character::AdventureMenu() {
 
 void Character::Upgrade() {
     
-    enum upgradeOption {upgradeHealth = 1, upgradeDamage, Leave};
+    enum UpgradeOption {kHealthUpgrade = 1, kDamageUpgrade, kLeave};
     
     cout << "\n";
     if (GoldCount() < 50) {
@@ -212,12 +212,12 @@ void Character::Upgrade() {
         return;
     }
     int upgrade_choice;
-    while ((upgrade_choice = UpgradeMenu()) != Leave) {
+    while ((upgrade_choice = UpgradeMenu()) != kLeave) {
         
-        if (upgrade_choice == upgradeHealth) {
+        if (upgrade_choice == kHealthUpgrade) {
             cout << "Your health has been increased to " << HealthUpgrade() << "." << endl;
         }
-        if (upgrade_choice == upgradeDamage) {
+        if (upgrade_choice == kDamageUpgrade) {
             cout << "Your damage has been increased to " << DamageUpgrade() << "." << endl;
         }
         GoldGain(-50);
@@ -247,7 +247,7 @@ int Character::UpgradeMenu() {
 
 
 
-void Character::InitializeUser() {
+void Character::Initialize() {
     cout << "Welcome to my text adventure game." << endl;
     cout << "Enter your name: ";
     string username;
@@ -271,22 +271,22 @@ void Character::InitializeUser() {
     
     int user_health, user_physical_damage, user_magic_damage;
     
-    enum charactertype {Sorcerer = 1, Warrior, Ranger};
+    enum CharacterType {kSorcerer = 1, kWarrior, kRanger};
     
     if (user_type == "1") { // Sorcerer
-        SetType(Sorcerer);
+        SetType(kSorcerer);
         user_health = 200;
         user_physical_damage = 0;
         user_magic_damage = 100;
     }
     if (user_type == "2") { // Warrior
-        SetType(Warrior);
+        SetType(kWarrior);
         user_health = 250;
         user_physical_damage = 70;
         user_magic_damage = 0;
     }
     if (user_type == "3") { // Ranger
-        SetType(Ranger);
+        SetType(kRanger);
         user_health = 150;
         user_physical_damage = 120;
         user_magic_damage = 0;
