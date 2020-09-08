@@ -1,13 +1,13 @@
 //
-//  header.hpp
+//  game.hpp
 //  Text Adventure Game
 //
 //  Created by Yunus Syed on 9/5/20.
 //  Copyright © 2020 Yunus Syed. All rights reserved.
 //
 
-#ifndef header_hpp
-#define header_hpp
+#ifndef game_hpp
+#define game_hpp
 using namespace std;
 
 class Enemy { // Goblin, Wolf, Troll, Giant, Dragon
@@ -66,4 +66,4 @@ public:
 };
 
 
-#endif /* header_hpp */
+#endif /* game_hpp */

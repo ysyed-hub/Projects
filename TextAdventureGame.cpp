@@ -9,14 +9,14 @@
 
 #include <iostream>
 #include <cmath>
-#include "header.hpp"
+#include "game.hpp"
 using namespace std;
 
 
 int main(int argc, const char * argv[]) {
     
     Character User(1, 0, 0, 0);
-    User.InitializeUser();
+    user.Initialize();
     User.PlayGame();
     
    
