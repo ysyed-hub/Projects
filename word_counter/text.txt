@@ -1,0 +1,1 @@
+This is an example. The program should be able to count the number of words in this example and display the number of times each word occurs. 
