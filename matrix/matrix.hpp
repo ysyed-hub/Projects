@@ -20,20 +20,22 @@ class Matrix {
     std::vector<std::vector<int> > entry;
 public:
     Matrix(int matrix_dimension);
-    Matrix(const Matrix &A);
     void SetEntry(int row_number, int col_number, int entry);
     void SetRow(int row_number, std::vector<int> new_row);
     void SetColumn(int col_number, std::vector<int> new_col);
     void Display() const;
     int GetDim() const {return dimension;}
     int GetEntry(int row_number, int col_number) const {return entry[row_number][col_number];}
-    std::vector<int> GetRow(int row_number);
-    std::vector<int> GetColumn(int col_number);
+    std::vector<int> GetRow(int row_number) const;
+    std::vector<int> GetColumn(int col_number) const;
     void SwapEntry(int row1, int col1, int row2, int col2);
     void Transpose();
-    Matrix Cofactor(int row, int col);
-    int Determinant();
-    Matrix Power(int exponent);
+    Matrix Cofactor(int row, int col) const;
+    double Determinant() const;
+    Matrix Power(int exponent) const;
+    static Matrix CreateRandom(int min, int max, int dimension);
+    
+    
     
     /*Matrix operator+(const Matrix &A) {
         if (A.GetDim() != this -> GetDim()) {
@@ -49,12 +51,13 @@ public:
         return *this;
     } */
     
-    friend Matrix operator+(Matrix &A, Matrix &B);
-    friend Matrix operator-(Matrix &A, Matrix &B);
-    friend Matrix operator*(Matrix &A, Matrix &B);
-    friend bool operator==(Matrix &A, Matrix &B);
+    friend Matrix operator+(Matrix const &a, Matrix const &b);
+    friend Matrix operator-(Matrix const &a, Matrix const &b);
+    friend Matrix operator*(Matrix const &a, Matrix const &b);
+    friend bool operator==(Matrix const &a, Matrix const &b);
     
 };
+
 
 
 #endif /* matrix_hpp */

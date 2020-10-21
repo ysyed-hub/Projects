@@ -2,190 +2,245 @@
 //  test.cpp
 //  matrix_class
 //
-//  Created by Yunus Syed on 9/12/20.
-//  Copyright © 2020 Yunus Syed. All rights reserved.
+//  created by Yunus Syed on 9/12/20.
+//  copyright © 2020 Yunus Syed. all rights reserved.
 //
 
 #include <iostream>
 #include <vector>
 #include "matrix.hpp"
+#include <thread>
 
-using namespace std;
 
+void TestSetEntry();
+void TestGetEntry(Matrix const &a, Matrix const &b, Matrix const &c);
+void TestGetRow(Matrix const &a, Matrix const &b, Matrix const &c);
+void TestGetColumn(Matrix const &a, Matrix const &b, Matrix const &c);
+void TestSwapEntry(Matrix &a);
+void TestTranspose(Matrix &a);
+void TestCofactor(Matrix const &a, Matrix const &b);
+void TestDeterminant(Matrix const &a, Matrix const &b, Matrix const &c);
+void TestOperationPlus(Matrix const &a, Matrix const &b);
+void TestOperationMinus(Matrix const &a, Matrix const &b);
+void TestOperationTimes(Matrix const &a, Matrix const &b);
+void TestPower(Matrix const &a, Matrix const &b);
+void TestOperationIdentical(Matrix const &a, Matrix const &b);
+void TestCreateRandom(int min, int max, int dim, double *p);
+
+struct RandomParam {
+    int min;
+    int max;
+    int dim;
+};
 
 int main(int argc, const char * argv[]) {
     
-    Matrix A(2), B(2), C(2);
-    std::vector<int> arow1, arow2;
-    arow1.push_back(2);
-    arow1.push_back(3);
-    A.SetRow(0, arow1);
+    Matrix a(2);
+    std::vector<int> a_row1;
+    a_row1.push_back(2);
+    a_row1.push_back(3);
+    a.SetRow(0, a_row1);
     
-    arow2.push_back(1);
-    arow2.push_back(3);
-    A.SetRow(1, arow2);
+    std::vector<int> a_row2;
+    a_row2.push_back(1);
+    a_row2.push_back(3);
+    a.SetRow(1, a_row2);
     
-    std::vector<int> brow1, brow2;
-    brow1.push_back(4);
-    brow1.push_back(-2);
-    B.SetRow(0, brow1);
+    Matrix b(2);
+    std::vector<int> b_row1;
+    b_row1.push_back(4);
+    b_row1.push_back(-2);
+    b.SetRow(0, b_row1);
     
-    brow2.push_back(1);
-    brow2.push_back(-3);
-    B.SetRow(1, brow2);
+    std::vector<int> b_row2;
+    b_row2.push_back(1);
+    b_row2.push_back(-3);
+    b.SetRow(1, b_row2);
     
-    {
-        Matrix D(2);
-        D.SetEntry(1, 1, 9);
-        if (D.GetEntry(1, 1) != 9)
-            std::cout << "Error: SetEntry" << std::endl;
-    }
+    Matrix c(2); // 2x2 zero matrix
     
-    {
-        if (A.GetEntry(0,0) != 2 || B.GetEntry(1, 1) != -3 || C.GetEntry(0, 1) != 0)
-            std::cout << "Error: GetEntry(1)" << std::endl;
-        
-        if (B.GetEntry(0,0) != 4 || C.GetEntry(1, 1) != 0 || A.GetEntry(0, 1) != 3)
-            std::cout << "Error: GetEntry(2)" << std::endl;
-        
-        if (C.GetEntry(0,0) != 0 || A.GetEntry(1, 1) != 3 || B.GetEntry(0, 1) != -2)
-            std::cout << "Error: GetEntry(3)" << std::endl;
-    }
+    TestSetEntry();
+    TestGetEntry(a, b, c);
+    TestGetRow(a, b, c);
+    TestGetColumn(a, b, c);
+    TestSwapEntry(a);
+    TestTranspose(a);
+    TestCofactor(a, b);
+    TestDeterminant(a, b, c);
+    TestOperationPlus(a, b);
+    TestOperationMinus(a, b);
+    TestOperationTimes(a, b);
+    TestPower(a, b);
+    TestOperationIdentical(a, b);
     
-    {
-    if (A.Determinant() != 3 || B.Determinant() != -10 || C.Determinant() != 0)
-        std::cout << "Error: Determinant" << std::endl;
-    }
     
-    {
-    bool error = false;
-    int i = 0;
-    int j = 0;
-    for (i = 0; i < A.GetDim(); i++) {
-        std::vector<int> a = A.GetRow(i);
-        std::vector<int> b = B.GetRow(i);
-        std::vector<int> c = C.GetRow(i);
-        
-        for (j = 0; j < B.GetDim(); j++) {
-            if (a[j] != A.GetEntry(i, j))
-                error = true;
-            if (b[j] != B.GetEntry(i, j))
-                error = true;
-            if (c[j] != C.GetEntry(i, j))
-                error = true;
-            if (error == true)
-                break;
-        }
-        if (error == true)
-            break;
-    }
-    if (error == true)
-        std::cout << "Error. GetRow" << std::endl;
-    }
+    double *p = new double;
+    double *q = new double;
     
-    {
-    bool error = false;
-    int i,j;
-    for (i = 0; i < A.GetDim(); i++) {
-        std::vector<int> a = A.GetColumn(i);
-        std::vector<int> b = B.GetColumn(i);
-        std::vector<int> c = C.GetColumn(i);
-        
-        for (j = 0; j < B.GetDim(); j++) {
-            if (a[j] != A.GetEntry(j, i))
-                error = true;
-            if (b[j] != B.GetEntry(j, i))
-                error = true;
-            if (c[j] != C.GetEntry(j, i))
-                error = true;
-            if (error == true)
-                break;
-        }
-        if (error == true)
-            break;
-    }
-    if (error == true)
-        std::cout << "Error: GetColumn" << std::endl;
-    }
-    
-    {
-        A.SwapEntry(0, 0, 1, 1);
-        if (A.GetEntry(1, 1) != 2 || A.GetEntry(0, 0) != 3) {
-            std::cout << "Error: SwapEntry" << std::endl;
-        }
-        A.SwapEntry(0, 0, 1, 1);
-    }
-    
-    {
-        
-        Matrix D(A);
-        D.Transpose();
-
-        bool error = false;
-        int i,j;
-        for (i = 0; i < A.GetDim(); i++) {
-            for (j = 0; j < A.GetDim(); j++) {
-                if (A.GetEntry(i, j) != D.GetEntry(j, i)) {
-                    error = true;
-                    break;
-                }
-            }
-            if (error == true)
-                break;
-        }
-        if (error == true)
-            std::cout << "Error: Transpose" << std::endl;
-    }
-    
-    {
-        Matrix D(A.Cofactor(1, 0));
-        Matrix E(B.Cofactor(0, 0));
-        if (D.GetEntry(0, 0) != 3 || E.GetEntry(0, 0) != -3)
-            std::cout << "Error: Cofactor" << std::endl;
-    }
-    
-    {
-        Matrix D = A + B;
-        if (D.GetEntry(1, 0) != 2 || D.GetEntry(0, 1) != 1)
-            std::cout << "Error: +" << std::endl;
-    }
-    
-    {
-        Matrix D = A - B;
-        if (D.GetEntry(0, 0) != -2 || D.GetEntry(1, 1) != 6)
-            std::cout << "Error: -(1)" << std::endl;
-    }
-    
-    {
-        Matrix D = A * B;
-        if (D.GetEntry(1, 0) != 7 || D.GetEntry(0, 1) != -13)
-            std::cout << "Error: *" << std::endl;
-    }
-    
-    {
-        Matrix D = A.Power(3);
-        if (D.GetEntry(1, 0) != 22 || D.GetEntry(0, 1) != 66)
-            std::cout << "Error: Power(1)" << std::endl;
-        
-        Matrix E = B.Power(2);
-        if (E.GetEntry(1, 0) != 1 || E.GetEntry(0, 1) != -2)
-            std::cout << "Error: Power(2)" << std::endl;
-
-        Matrix F = D - E;
-        if (F.GetEntry(1, 0) != 21 || F.GetEntry(0, 1) != 68)
-            std::cout << "Error: -(2)" << std::endl;
-    }
-    
-    {
-        bool test1 = (A == B);
-        if (test1 != false)
-            std::cout << "Error: ==(1)" << std::endl;
-        
-        Matrix D(A);
-        bool test2 = (A == D);
-        if (test2 != true)
-            std::cout << "Error: ==(2)" << std::endl;
-    }
+    std::thread first(TestCreateRandom, 0, 5, 10, p);
+    std::thread second(TestCreateRandom, 0, 6, 10, q);
+    first.join();
+    second.join();
+    std::cout << (*p) << endl;
+    std::cout << (*q) << endl;
     
     return 0;
+}
+
+
+void TestSetEntry() {
+        Matrix d(2);
+        d.SetEntry(1, 1, 9);
+        if (d.GetEntry(1, 1) != 9)
+            std::cout << "Error: SetEntry" << std::endl;
+}
+
+void TestGetEntry(Matrix const &a, Matrix const &b, Matrix const &c) {
+    if (a.GetEntry(0,0) != 2 || b.GetEntry(1, 1) != -3 || c.GetEntry(0, 1) != 0)
+        std::cout << "Error: GetEntry(1)" << std::endl;
+    
+    if (b.GetEntry(0,0) != 4 || c.GetEntry(1, 1) != 0 || a.GetEntry(0, 1) != 3)
+        std::cout << "Error: GetEntry(2)" << std::endl;
+    
+    if (c.GetEntry(0,0) != 0 || a.GetEntry(1, 1) != 3 || b.GetEntry(0, 1) != -2)
+        std::cout << "Error: GetEntry(3)" << std::endl;
+}
+
+void TestDeterminant(Matrix const &a, Matrix const &b, Matrix const &c) {
+    if (a.Determinant() != 3 || b.Determinant() != -10 || c.Determinant() != 0)
+        std::cout << "Error: Determinant" << std::endl;
+}
+
+void TestGetRow(Matrix const &a, Matrix const &b, Matrix const &c) {
+    bool Error = false;
+    int i = 0;
+    int j = 0;
+    for (i = 0; i < a.GetDim(); i++) {
+        std::vector<int> a_row = a.GetRow(i);
+        std::vector<int> b_row = b.GetRow(i);
+        std::vector<int> c_row = c.GetRow(i);
+        
+        for (j = 0; j < b.GetDim(); j++) {
+            if (a_row[j] != a.GetEntry(i, j))
+                Error = true;
+            if (b_row[j] != b.GetEntry(i, j))
+                Error = true;
+            if (c_row[j] != c.GetEntry(i, j))
+                Error = true;
+            if (Error == true)
+                break;
+        }
+        if (Error == true)
+            break;
+    }
+    if (Error == true)
+        std::cout << "Error: GetRow" << std::endl;
+}
+
+void TestGetColumn(Matrix const &a, Matrix const &b, Matrix const &c) {
+    bool Error = false;
+    int i,j;
+    for (i = 0; i < a.GetDim(); i++) {
+        std::vector<int> a_col = a.GetColumn(i);
+        std::vector<int> b_col = b.GetColumn(i);
+        std::vector<int> c_col = c.GetColumn(i);
+        
+        for (j = 0; j < b.GetDim(); j++) {
+            if (a_col[j] != a.GetEntry(j, i))
+                Error = true;
+            if (b_col[j] != b.GetEntry(j, i))
+                Error = true;
+            if (c_col[j] != c.GetEntry(j, i))
+                Error = true;
+            if (Error == true)
+                break;
+        }
+        if (Error == true)
+            break;
+    }
+    if (Error == true)
+        std::cout << "Error: GetColumn" << std::endl;
+}
+
+void TestSwapEntry(Matrix &a) {
+    a.SwapEntry(0, 0, 1, 1);
+    if (a.GetEntry(1, 1) != 2 || a.GetEntry(0, 0) != 3) {
+        std::cout << "Error: SwapEntry" << std::endl;
+    }
+    a.SwapEntry(0, 0, 1, 1);
+}
+
+void TestTranspose(Matrix &a) {
+    Matrix d(a);
+    d.Transpose();
+
+    bool Error = false;
+    int i,j;
+    for (i = 0; i < a.GetDim(); i++) {
+        for (j = 0; j < a.GetDim(); j++) {
+            if (a.GetEntry(i, j) != d.GetEntry(j, i)) {
+                Error = true;
+                break;
+            }
+        }
+        if (Error == true)
+            break;
+    }
+    if (Error == true)
+        std::cout << "Error: Transpose" << std::endl;
+}
+
+void TestCofactor(Matrix const &a, Matrix const &b) {
+    Matrix d(a.Cofactor(1, 0));
+    Matrix e(b.Cofactor(0, 0));
+    if (d.GetEntry(0, 0) != 3 || e.GetEntry(0, 0) != -3)
+        std::cout << "Error: Cofactor" << std::endl;
+}
+
+void TestOperationPlus(Matrix const &a, Matrix const &b) {
+    Matrix d = a + b;
+    if (d.GetEntry(1, 0) != 2 || d.GetEntry(0, 1) != 1)
+        std::cout << "Error: +" << std::endl;
+}
+
+void TestOperationMinus(Matrix const &a, Matrix const &b) {
+    Matrix d = a - b;
+    if (d.GetEntry(0, 0) != -2 || d.GetEntry(1, 1) != 6)
+        std::cout << "Error: -(1)" << std::endl;
+}
+
+void TestOperationTimes(Matrix const &a, Matrix const &b) {
+    Matrix d = a * b;
+    if (d.GetEntry(1, 0) != 7 || d.GetEntry(0, 1) != -13)
+        std::cout << "Error: *" << std::endl;
+}
+
+void TestPower(Matrix const &a, Matrix const &b) {
+    Matrix d = a.Power(3);
+    if (d.GetEntry(1, 0) != 22 || d.GetEntry(0, 1) != 66)
+        std::cout << "Error: Power(1)" << std::endl;
+    
+    Matrix e = b.Power(2);
+    if (e.GetEntry(1, 0) != 1 || e.GetEntry(0, 1) != -2)
+        std::cout << "Error: Power(2)" << std::endl;
+
+    Matrix f = d - e;
+    if (f.GetEntry(1, 0) != 21 || f.GetEntry(0, 1) != 68)
+        std::cout << "Error: -(2)" << std::endl;
+}
+
+void TestOperationIdentical(Matrix const &a, Matrix const &b) {
+    bool test1 = (a == b);
+    if (test1 != false)
+        std::cout << "Error: ==(1)" << std::endl;
+    
+    Matrix d(a);
+    bool test2 = (a == d);
+    if (test2 != true)
+        std::cout << "Error: ==(2)" << std::endl;
+}
+
+void TestCreateRandom(int min, int max, int dim, double *p) {
+    Matrix d(Matrix::CreateRandom(min, max, dim));
+    *p = d.Determinant();
 }

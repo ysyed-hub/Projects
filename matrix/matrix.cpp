@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <ctime>
 
 Matrix::Matrix(int matrix_dimension) {
     dimension = matrix_dimension;
@@ -42,7 +43,7 @@ void Matrix::SetRow(int row_number, std::vector<int> new_row) {
         SetEntry(row_number, i, new_row[i]);
 }
 
-Matrix::Matrix(const Matrix &A): dimension(A.dimension), entry(A.entry) {}
+// Matrix::Matrix(const Matrix &A): dimension(A.dimension), entry(A.entry) {}
 
 void Matrix::SetColumn(int col_number, std::vector<int> new_col) {
     if (col_number > dimension || col_number < 0) {
@@ -66,7 +67,7 @@ void Matrix::Display() const {
     }
 }
 
-std::vector<int> Matrix::GetRow(int row_number) {
+std::vector<int> Matrix::GetRow(int row_number) const {
     std::vector<int> row;
     if (row_number > dimension || row_number < 0) {
         std::cout << "Error, improper row number." << std::endl;
@@ -77,7 +78,7 @@ std::vector<int> Matrix::GetRow(int row_number) {
     return row;
 }
 
-std::vector<int> Matrix::GetColumn(int col_number) {
+std::vector<int> Matrix::GetColumn(int col_number) const {
     std::vector<int> col;
     if (col_number > dimension || col_number < 0) {
         std::cout << "Error, improper column number." << std::endl;
@@ -100,7 +101,7 @@ void Matrix::Transpose() {
             SwapEntry(i, j, j, i);
 }
 
-Matrix Matrix::Cofactor(int row, int col) {
+Matrix Matrix::Cofactor(int row, int col) const {
     Matrix C(dimension-1);
     for (int i = 0; i < dimension; i++)
         for (int j = 0; j < dimension; j++) {
@@ -116,8 +117,8 @@ Matrix Matrix::Cofactor(int row, int col) {
     return C;
 }
 
-int Matrix::Determinant() {
-    int det = 0;
+double Matrix::Determinant() const {
+    double det = 0;
     if (dimension == 0)
         return 0;
     if (dimension == 1)
@@ -129,88 +130,97 @@ int Matrix::Determinant() {
     return det;
 }
 
-int operator*(std::vector<int> const &A, std::vector<int> const &B) {
-    if (A.size() != B.size()) {
+int operator*(std::vector<int> const &a, std::vector<int> const &b) {
+    if (a.size() != b.size()) {
         std::cout << "Error, vectors must have same size" << std::endl;
         return 0;
     }
     int prod = 0;
-    for (int i = 0; i < A.size(); i++)
-        prod += A[i] * B[i];
+    for (int i = 0; i < a.size(); i++)
+        prod += a[i] * b[i];
     return prod;
 }
 
 
-Matrix operator*(Matrix &A, Matrix &B) {
-    if (A.GetDim() != B.GetDim()) {
+Matrix operator*(Matrix const &a, Matrix const &b) {
+    if (a.GetDim() != b.GetDim()) {
         std::cout << "Error, matrices must have same dimensions" << std::endl;
-        Matrix C(0);
-        return C;
+        Matrix c(0);
+        return c;
     }
-    int n = A.GetDim();
-    Matrix C(n);
+    int n = a.GetDim();
+    Matrix c(n);
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            C.SetEntry(i, j, A.GetRow(i) * B.GetColumn(j));
+            c.SetEntry(i, j, a.GetRow(i) * b.GetColumn(j));
     
-    return C;
+    return c;
 }
 
 
-Matrix Matrix::Power(int exponent) {
-    Matrix C(this -> dimension);
+Matrix Matrix::Power(int exponent) const {
+    Matrix c(this -> dimension);
     
     for (int i = 0; i < dimension; i++)
-        C.SetEntry(i, i, 1); // identity matrix
+        c.SetEntry(i, i, 1); // identity matrix
     if (exponent == 0)
-        return C;
+        return c;
     if (exponent > 0) {
-        C = *this;
+        c = *this;
         for (int i = 1; i < exponent; i++)
-            C = C * (*this);
+            c = c * (*this);
     }
-    return C;
+    return c;
 }
 
-bool operator==(Matrix &A, Matrix &B) {
-    if (A.GetDim() != B. GetDim())
+bool operator==(Matrix const &a, Matrix const &b) {
+    if (a.GetDim() != b.GetDim())
         return false;
-    for (int i = 0; i < A.GetDim(); i++)
-        for (int j = 0; j < A.GetDim(); j++)
-            if (A.GetEntry(i, j) != B.GetEntry(i, j))
+    for (int i = 0; i < a.GetDim(); i++)
+        for (int j = 0; j < a.GetDim(); j++)
+            if (a.GetEntry(i, j) != b.GetEntry(i, j))
                 return false;
     return true;
 }
 
-Matrix operator+(Matrix &A, Matrix &B) {
-    if (A.dimension != B.dimension) {
+Matrix operator+(Matrix const &a, Matrix const &b) {
+    if (a.dimension != b.dimension) {
         std::cout << "Error, matrices have different dimensions" << std::endl;
-        Matrix C(0);
-        return C;
+        Matrix c(0);
+        return c;
     }
-    int n = A.dimension;
-    Matrix C(A);
+    int n = a.dimension;
+    Matrix c(a);
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++) {
-            C.entry[i][j] = A.entry[i][j] + B.entry[i][j];
+            c.entry[i][j] = a.entry[i][j] + b.entry[i][j];
         }
     
-    return C;
+    return c;
 }
 
 
-Matrix operator-(Matrix &A, Matrix &B) {
-    if (A.GetDim() != B.GetDim()) {
+Matrix operator-(Matrix const &a, Matrix const &b) {
+    if (a.GetDim() != b.GetDim()) {
         std::cout << "Error, matrices have different dimensions" << std::endl;
-        Matrix C(0);
-        return C;
+        Matrix c(0);
+        return c;
     }
-    int n = A.GetDim();
-    Matrix C(n);
+    int n = a.GetDim();
+    Matrix c(n);
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            C.SetEntry(i, j, A.GetEntry(i,j) - B.GetEntry(i,j));
+            c.SetEntry(i, j, a.GetEntry(i,j) - b.GetEntry(i,j));
     
-    return C;
+    return c;
 }
 
+Matrix Matrix::CreateRandom(int min, int max, int dimension) {
+    Matrix a(dimension);
+    for (int i = 0; i < dimension; i++)
+        for (int j = 0; j < dimension; j++) {
+            int rand_num = std::rand() % (max-min + 1) + min;
+            a.SetEntry(i, j, rand_num);
+        }
+    return a;
+}
